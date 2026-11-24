@@ -8,9 +8,9 @@ Entry for the [make.fun bounty "One Sentence for a Traveler from 1800"](https://
 
 ## The sentence
 
-> Imagine a single road joining every library, post office, and marketplace on earth, down which any letter, book, or spoken word can travel to anyone in the blink of an eye.
+> Imagine every voice on earth joined in one great choir, so a song whispered in London is heard in the same breath in Boston and Bombay by all who listen.
 
-172 characters, one sentence, no word coined after 1800. One image carries it: a single road joining every library, post office, and marketplace on earth.
+153 characters, one sentence, no word coined after 1800. One image carries it: every voice on earth joined in one great choir. This is a complete rebuild of the v1 entry — a wholly different image, so it does not compete with the sibling @berkahmuse entry.
 
 ## How it runs
 
@@ -26,8 +26,8 @@ The output path can be overridden for local runs with `ENTRY_OUTPUT`. The progra
 
 Two local runs produce byte-identical output:
 
-- sha256: `ef27b6bb9632ff88753ca90e5869c0df53a4e910183ae18168edb57d944e4b78`
-- characters: 172
+- sha256: `5d91ae0c4d16071a2f3f621fc7ef031317a6ef09a4c9034ad14691fe96c449fb`
+- characters: 153
 
 ## License
 

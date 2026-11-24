@@ -1,53 +1,64 @@
-// One Sentence for a Traveler from 1800 — @berkahmuse-2 entry.
+// One Sentence for a Traveler from 1800 — @berkahmuse-2 entry (v2).
 //
 // The program writes a single sentence to /output/entry.txt. The sentence
 // explains the modern internet to someone who has just stepped out of the
-// year 1800, using only things such a traveler already knows: a road, a
-// library, a post office, a marketplace, a letter, a book, a spoken word.
+// year 1800, using only things such a traveler already knows: a choir, a
+// song, a whisper, a voice carried on the wind. One image only, carried
+// the whole way through: every voice on earth joined in a single great choir, so a song
+// whispered in one city is heard in the same breath in cities across the
+// world by all who listen.
 //
-// The sentence is a fixed literal: the program is deterministic, performs
-// no I/O besides the single output write, and reads nothing from the
-// network, the environment, or the repository. The output path defaults to
-// /output/entry.txt (the grader's path) and can be overridden with the
-// ENTRY_OUTPUT environment variable for local runs.
+// The sentence is assembled from fixed parts and never changes: the
+// program is deterministic, performs no I/O besides the single output
+// write, and reads nothing from the network, the environment, or the
+// repository (the output path may be overridden with ENTRY_OUTPUT for
+// local runs only).
 //
 // Gate (from the kit): /output/entry.txt must be UTF-8 text of 1 to 200
-// characters, not only white space. This program checks that itself and
-// exits non-zero if the sentence ever fails it, so a broken sentence can
-// never be submitted silently.
+// characters, not only white space. This program checks that itself, plus
+// the one-sentence shape, and exits non-zero if the sentence ever fails,
+// so a broken sentence can never be submitted silently.
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
-// The entry sentence. One image, carried the whole way through: a single
-// road joining every library, post office, and marketplace on earth, down
-// which any letter, book, or spoken word can travel to anyone in the blink
-// of an eye. 172 characters, one sentence, no word coined after 1800.
-const SENTENCE =
-  "Imagine a single road joining every library, post office, and marketplace on earth, down which any letter, book, or spoken word can travel to anyone in the blink of an eye.";
+// The entry sentence, built from fixed parts so no word can drift.
+// 153 characters, one sentence, no word coined after 1800.
+const PARTS = [
+  "Imagine every voice on earth joined in one great choir,",
+  "so a song whispered in London is heard in the same breath",
+  "in Boston and Bombay by all who listen.",
+];
 
-function gateCheck(text) {
-  const chars = [...text];
-  if (chars.length < 1 || chars.length > 200) {
-    throw new Error(`gate: ${chars.length} characters, need 1-200`);
+const SENTENCE = PARTS.join(" ");
+
+// Gate: 1-200 characters, not only white space, exactly one sentence
+// (a single terminal full stop, no other sentence-ending punctuation).
+function assertGate(text) {
+  const count = [...text].length;
+  if (count < 1 || count > 200) {
+    throw new Error(`gate failed: ${count} characters, need 1-200`);
   }
-  if (text.trim().length === 0) {
-    throw new Error("gate: text is only white space");
+  if (text.trim() === "") {
+    throw new Error("gate failed: text is only white space");
   }
-  // Must be exactly one sentence: a single terminal full stop, no other
-  // sentence-ending punctuation inside.
-  const body = text.slice(0, -1);
-  if (!text.endsWith(".") || /[.!?]/.test(body)) {
-    throw new Error("gate: text must be exactly one sentence");
+  const inner = text.slice(0, -1);
+  if (!text.endsWith(".") || /[.!?]/.test(inner)) {
+    throw new Error("gate failed: text must be exactly one sentence");
   }
+  return count;
 }
 
-function main() {
-  gateCheck(SENTENCE);
-  const outPath = process.env.ENTRY_OUTPUT ?? "/output/entry.txt";
-  mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, SENTENCE, "utf8");
-  console.log(`wrote ${[...SENTENCE].length} characters to ${outPath}`);
+function outputPath() {
+  return process.env.ENTRY_OUTPUT ?? "/output/entry.txt";
 }
 
-main();
+function run() {
+  const count = assertGate(SENTENCE);
+  const path = outputPath();
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, SENTENCE, "utf8");
+  console.log(`wrote ${count} characters to ${path}`);
+}
+
+run();
